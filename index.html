@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battlepass and Permissions</title>
+    <style>
+        :root {
+            --srv-cyan: #00ffff;
+            --srv-pink: #ff69b4;
+            --srv-gold: #ffd700;
+            --srv-black: #000000;
+            --srv-green: #00ff00;
+            --ark-card: #121212;
+            --ark-input: #1a1a1a;
+        }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            margin: 0; padding: 15px; 
+            background-color: var(--srv-black); 
+            color: #ffffff; 
+            display: flex; justify-content: center; 
+        }
+        .container { 
+            width: 100%; max-width: 600px; 
+            background: var(--ark-card); 
+            padding: 20px; border-radius: 12px; 
+            border: 2px solid var(--srv-pink); 
+            box-sizing: border-box; 
+        }
+        h2 { 
+            text-align: center; color: var(--srv-cyan); 
+            text-transform: uppercase; letter-spacing: 2px; 
+            font-size: 1rem; margin-bottom: 20px; 
+            border-bottom: 2px solid var(--srv-gold); 
+            padding-bottom: 15px; 
+        }
+        
+        .mode-toggle { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 5px; 
+            background: #222; padding: 4px; border-radius: 8px; margin-bottom: 20px; 
+        }
+        .mode-btn { 
+            padding: 10px; border: none; border-radius: 6px; 
+            background: transparent; color: #888; 
+            font-weight: bold; cursor: pointer; font-size: 0.8rem; 
+        }
+        .mode-btn.active { background: var(--srv-cyan); color: var(--srv-black); }
+
+        .input-group { margin-bottom: 15px; }
+        .hidden { display: none !important; }
+        label { 
+            display: block; margin-bottom: 6px; font-weight: 600; 
+            color: var(--srv-gold); font-size: 0.75rem; text-transform: uppercase; 
+        }
+        input, select { 
+            width: 100%; padding: 12px; border: 1px solid #333; 
+            border-radius: 8px; background: var(--ark-input); 
+            color: #fff; box-sizing: border-box; font-size: 16px; 
+            appearance: none; -webkit-appearance: none; 
+        }
+        select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300ffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat; background-position: right 12px center; 
+            background-size: 16px; padding-right: 40px; 
+        }
+        
+        button { 
+            padding: 16px; border: none; border-radius: 8px; 
+            cursor: pointer; font-size: 14px; font-weight: 800; 
+            text-transform: uppercase; touch-action: manipulation; 
+            width: 100%; margin-top: 8px; 
+        }
+        .btn-progress { background-color: var(--srv-cyan); color: var(--srv-black); }
+        .btn-reset { background-color: var(--srv-pink); color: #fff; }
+        .btn-perm { background-color: var(--srv-green); color: var(--srv-black); }
+        .btn-clear { background-color: #444; color: #fff; margin-top: 15px; }
+        button:active { filter: brightness(1.2); transform: scale(0.98); }
+
+        .result-area { 
+            margin-top: 20px; padding: 15px; 
+            background: #000; border-radius: 8px; 
+            text-align: center; border: 1px dashed var(--srv-green); 
+        }
+        #output { 
+            font-family: 'Courier New', monospace; color: var(--srv-green); 
+            word-break: break-all; font-size: 0.95rem; display: block; 
+            margin-bottom: 15px; min-height: 1.2em; 
+        }
+        .copy-btn { 
+            background: transparent; border: 1px solid var(--srv-cyan); 
+            color: var(--srv-cyan); padding: 10px; width: 100%; border-radius: 6px; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Battlepass and Permissions</h2>
+
+    <div class="mode-toggle">
+        <button class="mode-btn active" onclick="setMode('bp')">Battle Pass</button>
+        <button class="mode-btn" onclick="setMode('perm')">Permissions</button>
+    </div>
+
+    <div class="input-group" id="idBox">
+        <label>Player EOS ID</label>
+        <input type="text" id="eosId" placeholder="Paste EOS ID..." autocomplete="off">
+    </div>
+
+    <div id="bpFields">
+        <div class="input-group">
+            <label>Quest Selection</label>
+            <select id="questSelect">
+                <optgroup label="The Island">
+                    <option value="45266 5" data-name="quest1">Quest 1: Island Initiation - Stay 5m</option>
+                    <option value="71188 300" data-name="quest2">Quest 2: 300 rare flowers</option>
+                    <option value="80183 300" data-name="quest2">Quest 2: 300 rare mushrooms</option>
+                    <option value="32877 1000" data-name="quest2">Quest 2: 1000 Species X seeds</option>
+                    <option value="21189 2" data-name="quest3">Quest 3: 2 Purlovias (100+)</option>
+                    <option value="51938 2" data-name="quest3">Quest 3: 2 Anglerfish (100+)</option>
+                    <option value="77297 1" data-name="quest4">Quest 4: 1 Alpha Carno</option>
+                    <option value="53790 1" data-name="quest4: 1 Alpha Raptor"></option>
+                    <option value="18772 1" data-name="quest4">Quest 4: 1 Alpha Rex</option>
+                    <option value="35248 1" data-name="quest4">Quest 4: 1 Alpha Leedsichthys</option>
+                </optgroup>
+                <optgroup label="Scorched Earth">
+                    <option value="75941 10" data-name="quest5">Quest 5: 10 mins on SE</option>
+                    <option value="85251 1000" data-name="quest6">Quest 6: 1k cactus sap</option>
+                    <option value="67353 1000" data-name="quest6">Quest 6: 1k sulfur</option>
+                    <option value="80165 1000" data-name="quest6">Quest 6: 1k sand</option>
+                    <option value="74647 2" data-name="quest7">Quest 7: 2 Fasos (100+)</option>
+                    <option value="79969 2" data-name="quest7">Quest 7: 2 Mantis (100+)</option>
+                    <option value="80753 1" data-name="quest7">Quest 7: Claim baby poison wyvern</option>
+                    <option value="63398 50" data-name="quest8">Quest 8: 50 Water Jug Bugs</option>
+                    <option value="18748 50" data-name="quest8">Quest 8: 50 Oil Jug Bugs</option>
+                    <option value="98667 1" data-name="quest8">Quest 8: 1 Alpha Fire Wyvern</option>
+                </optgroup>
+                <optgroup label="The Center">
+                    <option value="42871 15" data-name="quest9">Quest 9: 15 mins on Center</option>
+                    <option value="24202 300" data-name="quest10">Quest 10: 300 rockarrot seeds</option>
+                    <option value="19225 300" data-name="quest10">Quest 10: 300 citronal seeds</option>
+                    <option value="22936 300" data-name="quest10">Quest 10: 300 longrass seeds</option>
+                    <option value="32164 300" data-name="quest10">Quest 10: 300 savoroot seeds</option>
+                    <option value="14455 2" data-name="quest11">Quest 11: 2 tusos (100+)</option>
+                    <option value="63830 2" data-name="quest11">Quest 11: 2 shastas (100+)</option>
+                    <option value="92025 2" data-name="quest11">Quest 11: 2 xiphactinus (100+)</option>
+                    <option value="60851 5" data-name="quest12">Quest 12: 5 pyromanes (100+)</option>
+                    <option value="81402 1" data-name="quest12">Quest 12: 1 giga (100+)</option>
+                </optgroup>
+            </select>
+        </div>
+        <button class="btn-progress" onclick="genBP('progress')">Add Progress</button>
+        <button class="btn-reset" onclick="genBP('reset')">Reset Rewards</button>
+    </div>
+
+    <div id="permFields" class="hidden">
+        <div class="input-group">
+            <label>Permission Command</label>
+            <select id="permCmd" onchange="togglePermInputs()">
+                <option value="add">Add Permanent Group</option>
+                <option value="remove">Remove Group</option>
+                <option value="addtimed">Add Timed Group</option>
+                <option value="removetimed">Remove Timed Group</option>
+                <option value="list">List Player Groups</option>
+                <option value="reload">Reload Permissions</option>
+            </select>
+        </div>
+        <div class="input-group" id="groupSelectBox">
+            <label>Select Group</label>
+            <select id="groupName">
+                <option value="Admins">Admins</option><option value="Default">Default</option>
+                <option value="Staff">Staff</option><option value="VIP">VIP</option>
+                <option value="VIP+">VIP+</option><option value="battle">battle</option>
+                <option value="Vaction">Vaction</option><option value="VIP++">VIP++</option>
+                <option value="Muted">Muted</option><option value="Legend">Legend</option>
+                <option value="Premium">Premium</option><option value="EventL">EventL</option>
+                <option value="Sbattle">Sbattle</option><option value="ET">ET</option>
+                <option value="LimitsNotify">LimitsNotify</option>
+            </select>
+        </div>
+        <div id="timedBox" class="hidden">
+            <div class="input-group"><label>Duration (Hours)</label><input type="number" id="hours" value="24"></div>
+            <div class="input-group"><label>Delay (Hours)</label><input type="number" id="delay" value="0"></div>
+        </div>
+        <button class="btn-perm" onclick="genPerm()">Generate Permission Command</button>
+    </div>
+
+    <button class="btn-clear" onclick="clearAll()">Clear All Fields</button>
+
+    <div class="result-area">
+        <code id="output">Waiting for generation...</code><br>
+        <button class="copy-btn" id="copyBtn" onclick="copyText()" style="display:none;">Copy Command</button>
+    </div>
+</div>
+
+<script>
+    let currentMode = 'bp';
+    function setMode(mode) {
+        currentMode = mode;
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        if (mode === 'bp') document.querySelectorAll('.mode-btn')[0].classList.add('active');
+        else document.querySelectorAll('.mode-btn')[1].classList.add('active');
+        document.getElementById('bpFields').classList.toggle('hidden', mode !== 'bp');
+        document.getElementById('permFields').classList.toggle('hidden', mode !== 'perm');
+        document.getElementById('idBox').classList.toggle('hidden', false);
+        togglePermInputs();
+    }
+    function togglePermInputs() {
+        if(currentMode !== 'perm') return;
+        const cmd = document.getElementById('permCmd').value;
+        document.getElementById('groupSelectBox').classList.toggle('hidden', cmd === 'list' || cmd === 'reload');
+        document.getElementById('timedBox').classList.toggle('hidden', cmd !== 'addtimed');
+        document.getElementById('idBox').classList.toggle('hidden', cmd === 'reload');
+    }
+    function genBP(type) {
+        const id = document.getElementById('eosId').value.trim();
+        const sel = document.getElementById('questSelect');
+        if(!id) return alert("Please enter EOS ID");
+        let cmd = (type === 'progress') ? `BattlePass.AddProgress ${id} ${sel.value}` : `BattlePass.ResetQuestRewards ${id} ${sel.options[sel.selectedIndex].dataset.name}`;
+        updateOutput(cmd);
+    }
+    function genPerm() {
+        const id = document.getElementById('eosId').value.trim();
+        const cmdType = document.getElementById('permCmd').value;
+        const group = document.getElementById('groupName').value;
+        if(cmdType !== 'reload' && !id) return alert("Please enter EOS ID");
+        let cmd = "";
+        switch(cmdType) {
+            case 'add': cmd = `Permissions.Add ${id} ${group}`; break;
+            case 'remove': cmd = `Permissions.Remove ${id} ${group}`; break;
+            case 'addtimed': cmd = `Permissions.AddTimed ${id} ${group} ${document.getElementById('hours').value} ${document.getElementById('delay').value}`; break;
+            case 'removetimed': cmd = `Permissions.RemoveTimed ${id} ${group}`; break;
+            case 'list': cmd = `Permissions.PlayerGroups ${id}`; break;
+            case 'reload': cmd = `Permissions.reload`; break;
+        }
+        updateOutput(cmd);
+    }
+    function updateOutput(text) { document.getElementById('output').innerText = text; document.getElementById('copyBtn').style.display = 'block'; }
+    function copyText() { navigator.clipboard.writeText(document.getElementById('output').innerText); document.getElementById('copyBtn').innerText = "COPIED!"; setTimeout(() => document.getElementById('copyBtn').innerText = "Copy Command", 2000); }
+    function clearAll() { document.getElementById('eosId').value = ''; document.getElementById('output').innerText = 'Waiting...'; document.getElementById('copyBtn').style.display = 'none'; }
+</script>
+</body>
+</html>
