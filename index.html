@@ -49,6 +49,8 @@
 
         .input-group { margin-bottom: 15px; }
         .hidden { display: none !important; }
+        .info-text { font-size: 0.7rem; color: #aaa; margin-bottom: 5px; font-style: italic; }
+        
         label { 
             display: block; margin-bottom: 6px; font-weight: 600; 
             color: var(--srv-gold); font-size: 0.75rem; text-transform: uppercase; 
@@ -120,7 +122,7 @@
                     <option value="21189 2" data-name="quest3">Quest 3: 2 Purlovias (100+)</option>
                     <option value="51938 2" data-name="quest3">Quest 3: 2 Anglerfish (100+)</option>
                     <option value="77297 1" data-name="quest4">Quest 4: 1 Alpha Carno</option>
-                    <option value="53790 1" data-name="quest4: 1 Alpha Raptor"></option>
+                    <option value="53790 1" data-name="quest4">Quest 4: 1 Alpha Raptor</option>
                     <option value="18772 1" data-name="quest4">Quest 4: 1 Alpha Rex</option>
                     <option value="35248 1" data-name="quest4">Quest 4: 1 Alpha Leedsichthys</option>
                 </optgroup>
@@ -150,6 +152,17 @@
                 </optgroup>
             </select>
         </div>
+
+        <div class="input-group">
+            <div class="info-text">Select Free or Premium or just dont select anything at all to reset both.</div>
+            <label>Reset Reward Type</label>
+            <select id="rewardType">
+                <option value="">Both (Default)</option>
+                <option value="Free">Free</option>
+                <option value="Premium">Premium</option>
+            </select>
+        </div>
+
         <button class="btn-progress" onclick="genBP('progress')">Add Progress</button>
         <button class="btn-reset" onclick="genBP('reset')">Reset Rewards</button>
     </div>
@@ -216,8 +229,19 @@
     function genBP(type) {
         const id = document.getElementById('eosId').value.trim();
         const sel = document.getElementById('questSelect');
+        const reward = document.getElementById('rewardType').value;
         if(!id) return alert("Please enter EOS ID");
-        let cmd = (type === 'progress') ? `BattlePass.AddProgress ${id} ${sel.value}` : `BattlePass.ResetQuestRewards ${id} ${sel.options[sel.selectedIndex].dataset.name}`;
+        
+        let cmd = "";
+        if (type === 'progress') {
+            cmd = `BattlePass.AddProgress ${id} ${sel.value}`;
+        } else {
+            const questName = sel.options[sel.selectedIndex].dataset.name;
+            cmd = `BattlePass.ResetQuestRewards ${id} ${questName}`;
+            if (reward !== "") {
+                cmd += ` ${reward}`;
+            }
+        }
         updateOutput(cmd);
     }
     function genPerm() {
@@ -238,7 +262,7 @@
     }
     function updateOutput(text) { document.getElementById('output').innerText = text; document.getElementById('copyBtn').style.display = 'block'; }
     function copyText() { navigator.clipboard.writeText(document.getElementById('output').innerText); document.getElementById('copyBtn').innerText = "COPIED!"; setTimeout(() => document.getElementById('copyBtn').innerText = "Copy Command", 2000); }
-    function clearAll() { document.getElementById('eosId').value = ''; document.getElementById('output').innerText = 'Waiting...'; document.getElementById('copyBtn').style.display = 'none'; }
+    function clearAll() { document.getElementById('eosId').value = ''; document.getElementById('output').innerText = 'Waiting...'; document.getElementById('copyBtn').style.display = 'none'; document.getElementById('rewardType').value = ''; }
 </script>
 </body> 
 </html>
