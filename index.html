@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Battlepass and Permissions</title>
+    <title>Battlepass/Permissions</title>
     <style>
         :root {
             --srv-cyan: #00ffff;
@@ -35,7 +35,6 @@
             border-bottom: 2px solid var(--srv-gold); 
             padding-bottom: 15px; 
         }
-        
         .mode-toggle { 
             display: grid; grid-template-columns: 1fr 1fr; gap: 5px; 
             background: #222; padding: 4px; border-radius: 8px; margin-bottom: 20px; 
@@ -46,11 +45,9 @@
             font-weight: bold; cursor: pointer; font-size: 0.8rem; 
         }
         .mode-btn.active { background: var(--srv-cyan); color: var(--srv-black); }
-
         .input-group { margin-bottom: 15px; }
         .hidden { display: none !important; }
-        .info-text { font-size: 0.7rem; color: #aaa; margin-bottom: 5px; font-style: italic; }
-        
+        .info-text { font-size: 0.7rem; color: #aaa; margin-bottom: 5px; font-style: italic; line-height: 1.2; }
         label { 
             display: block; margin-bottom: 6px; font-weight: 600; 
             color: var(--srv-gold); font-size: 0.75rem; text-transform: uppercase; 
@@ -66,7 +63,6 @@
             background-repeat: no-repeat; background-position: right 12px center; 
             background-size: 16px; padding-right: 40px; 
         }
-        
         button { 
             padding: 16px; border: none; border-radius: 8px; 
             cursor: pointer; font-size: 14px; font-weight: 800; 
@@ -77,8 +73,6 @@
         .btn-reset { background-color: var(--srv-pink); color: #fff; }
         .btn-perm { background-color: var(--srv-green); color: var(--srv-black); }
         .btn-clear { background-color: #444; color: #fff; margin-top: 15px; }
-        button:active { filter: brightness(1.2); transform: scale(0.98); }
-
         .result-area { 
             margin-top: 20px; padding: 15px; 
             background: #000; border-radius: 8px; 
@@ -86,8 +80,9 @@
         }
         #output { 
             font-family: 'Courier New', monospace; color: var(--srv-green); 
-            word-break: break-all; font-size: 0.95rem; display: block; 
-            margin-bottom: 15px; min-height: 1.2em; 
+            word-break: break-all; font-size: 0.85rem; display: block; 
+            margin-bottom: 15px; min-height: 1.2em; text-align: left;
+            white-space: pre-wrap;
         }
         .copy-btn { 
             background: transparent; border: 1px solid var(--srv-cyan); 
@@ -98,7 +93,7 @@
 <body>
 
 <div class="container">
-    <h2>Battlepass and Permissions</h2>
+    <h2>Battlepass/Permissions</h2>
 
     <div class="mode-toggle">
         <button class="mode-btn active" onclick="setMode('bp')">Battle Pass</button>
@@ -115,40 +110,119 @@
             <label>Quest Selection</label>
             <select id="questSelect">
                 <optgroup label="The Island">
-                    <option value="45266 5" data-name="quest1">Quest 1: Island Initiation - Stay 5m</option>
-                    <option value="71188 300" data-name="quest2">Quest 2: 300 rare flowers</option>
-                    <option value="80183 300" data-name="quest2">Quest 2: 300 rare mushrooms</option>
-                    <option value="32877 1000" data-name="quest2">Quest 2: 1000 Species X seeds</option>
-                    <option value="21189 2" data-name="quest3">Quest 3: 2 Purlovias (100+)</option>
-                    <option value="51938 2" data-name="quest3">Quest 3: 2 Anglerfish (100+)</option>
-                    <option value="77297 1" data-name="quest4">Quest 4: 1 Alpha Carno</option>
-                    <option value="53790 1" data-name="quest4">Quest 4: 1 Alpha Raptor</option>
-                    <option value="18772 1" data-name="quest4">Quest 4: 1 Alpha Rex</option>
-                    <option value="35248 1" data-name="quest4">Quest 4: 1 Alpha Leedsichthys</option>
+                    <option value="45266 5" data-name="quest1">Q1: Island Initiation (Stay 5m)</option>
+                    <option value="71188 300|80183 300|32877 1000" data-name="quest2">Q2: COMPLETE ALL - Forage & Fortune</option>
+                    <option value="71188 300" data-name="quest2">Q2: Part A - 300 Rare Flowers</option>
+                    <option value="80183 300" data-name="quest2">Q2: Part B - 300 Rare Mushrooms</option>
+                    <option value="32877 1000" data-name="quest2">Q2: Part C - 1000 Species X Seeds</option>
+                    <option value="21189 2|51938 2" data-name="quest3">Q3: COMPLETE ALL - Friends not Food</option>
+                    <option value="21189 2" data-name="quest3">Q3: Part A - 2 Purlovias (100+)</option>
+                    <option value="51938 2" data-name="quest3">Q3: Part B - 2 Anglerfish (100+)</option>
+                    <option value="77297 1|53790 1|18772 1|35248 1" data-name="quest4">Q4: COMPLETE ALL - Who's Alpha Now?</option>
+                    <option value="77297 1" data-name="quest4">Q4: Part A - 1 Alpha Carno</option>
+                    <option value="53790 1" data-name="quest4">Q4: Part B - 1 Alpha Raptor</option>
+                    <option value="18772 1" data-name="quest4">Q4: Part C - 1 Alpha Rex</option>
+                    <option value="35248 1" data-name="quest4">Q4: Part D - 1 Alpha Leedsichthys</option>
                 </optgroup>
                 <optgroup label="Scorched Earth">
-                    <option value="75941 10" data-name="quest5">Quest 5: 10 mins on SE</option>
-                    <option value="85251 1000" data-name="quest6">Quest 6: 1k cactus sap</option>
-                    <option value="67353 1000" data-name="quest6">Quest 6: 1k sulfur</option>
-                    <option value="80165 1000" data-name="quest6">Quest 6: 1k sand</option>
-                    <option value="74647 2" data-name="quest7">Quest 7: 2 Fasos (100+)</option>
-                    <option value="79969 2" data-name="quest7">Quest 7: 2 Mantis (100+)</option>
-                    <option value="80753 1" data-name="quest7">Quest 7: Claim baby poison wyvern</option>
-                    <option value="63398 50" data-name="quest8">Quest 8: 50 Water Jug Bugs</option>
-                    <option value="18748 50" data-name="quest8">Quest 8: 50 Oil Jug Bugs</option>
-                    <option value="98667 1" data-name="quest8">Quest 8: 1 Alpha Fire Wyvern</option>
+                    <option value="75941 10" data-name="quest5">Q5: 10m on SE</option>
+                    <option value="85251 1000|67353 1000|80165 1000" data-name="quest6">Q6: COMPLETE ALL - Ash to Assets</option>
+                    <option value="85251 1000" data-name="quest6">Q6: Part A - 1000 Cactus Sap</option>
+                    <option value="67353 1000" data-name="quest6">Q6: Part B - 1000 Sulfur</option>
+                    <option value="80165 1000" data-name="quest6">Q6: Part C - 1000 Sand</option>
+                    <option value="74647 2|79969 2|80753 1" data-name="quest7">Q7: COMPLETE ALL - Wrestling Wasteland</option>
+                    <option value="74647 2" data-name="quest7">Q7: Part A - 2 Fasos (100+)</option>
+                    <option value="79969 2" data-name="quest7">Q7: Part B - 2 Mantis (100+)</option>
+                    <option value="80753 1" data-name="quest7">Q7: Part C - Claim Poison Wyvern</option>
+                    <option value="63398 50|18748 50|98667 1" data-name="quest8">Q8: COMPLETE ALL - Hunt in Heat</option>
+                    <option value="63398 50" data-name="quest8">Q8: Part A - 50 Water Jug Bugs</option>
+                    <option value="18748 50" data-name="quest8">Q8: Part B - 50 Oil Jug Bugs</option>
+                    <option value="98667 1" data-name="quest8">Q8: Part C - 1 Alpha Fire Wyvern</option>
                 </optgroup>
                 <optgroup label="The Center">
-                    <option value="42871 15" data-name="quest9">Quest 9: 15 mins on Center</option>
-                    <option value="24202 300" data-name="quest10">Quest 10: 300 rockarrot seeds</option>
-                    <option value="19225 300" data-name="quest10">Quest 10: 300 citronal seeds</option>
-                    <option value="22936 300" data-name="quest10">Quest 10: 300 longrass seeds</option>
-                    <option value="32164 300" data-name="quest10">Quest 10: 300 savoroot seeds</option>
-                    <option value="14455 2" data-name="quest11">Quest 11: 2 tusos (100+)</option>
-                    <option value="63830 2" data-name="quest11">Quest 11: 2 shastas (100+)</option>
-                    <option value="92025 2" data-name="quest11">Quest 11: 2 xiphactinus (100+)</option>
-                    <option value="60851 5" data-name="quest12">Quest 12: 5 pyromanes (100+)</option>
-                    <option value="81402 1" data-name="quest12">Quest 12: 1 giga (100+)</option>
+                    <option value="42871 15" data-name="quest9">Q9: 15m on Center</option>
+                    <option value="24202 300|19225 300|22936 300|32164 300" data-name="quest10">Q10: COMPLETE ALL - Riches of Center</option>
+                    <option value="24202 300" data-name="quest10">Q10: Part A - 300 Rockarrot Seeds</option>
+                    <option value="19225 300" data-name="quest10">Q10: Part B - 300 Citronal Seeds</option>
+                    <option value="22936 300" data-name="quest10">Q10: Part C - 300 Longrass Seeds</option>
+                    <option value="32164 300" data-name="quest10">Q10: Part D - 300 Savoroot Seeds</option>
+                    <option value="14455 2|63830 2|92025 2" data-name="quest11">Q11: COMPLETE ALL - Masters of Center</option>
+                    <option value="14455 2" data-name="quest11">Q11: Part A - 2 Tusos (100+)</option>
+                    <option value="63830 2" data-name="quest11">Q11: Part B - 2 Shastas (100+)</option>
+                    <option value="92025 2" data-name="quest11">Q11: Part C - 2 Xiphactinus (100+)</option>
+                    <option value="60851 5|81402 1" data-name="quest12">Q12: COMPLETE ALL - Cleanse the Center</option>
+                    <option value="60851 5" data-name="quest12">Q12: Part A - 5 Pyromanes (100+)</option>
+                    <option value="81402 1" data-name="quest12">Q12: Part B - 1 Giga (100+)</option>
+                </optgroup>
+                <optgroup label="Aberration">
+                    <option value="60525 500|35914 500|90833 500|63936 1000" data-name="quest13">Q13: COMPLETE ALL - Spoils of Subterrane</option>
+                    <option value="60525 500" data-name="quest13">Q13: Part A - 500 Green Gems</option>
+                    <option value="35914 500" data-name="quest13">Q13: Part B - 500 Red Gems</option>
+                    <option value="90833 500" data-name="quest13">Q13: Part C - 500 Blue Gems</option>
+                    <option value="63936 1000" data-name="quest13">Q13: Part D - 1000 Fungal Wood</option>
+                    <option value="38474 20" data-name="quest14">Q14: 20m on Aberration</option>
+                    <option value="83552 1|81344 2|97002 2" data-name="quest15">Q15: COMPLETE ALL - Terror to Tame</option>
+                    <option value="83552 1" data-name="quest15">Q15: Part A - 1 Bulbdog (100+)</option>
+                    <option value="81344 2" data-name="quest15">Q15: Part B - 2 Ravagers (100+)</option>
+                    <option value="97002 2" data-name="quest15">Q15: Part C - 2 Baby Rock Drakes (100+)</option>
+                    <option value="97955 100|10245 2|46464 5|82254 2|86892 2" data-name="quest16">Q16: COMPLETE ALL - Hunt the Aberrant</option>
+                    <option value="97955 100" data-name="quest16">Q16: Part A - 100 Nameless</option>
+                    <option value="10245 2" data-name="quest16">Q16: Part B - 2 Basilisks (100+)</option>
+                    <option value="46464 5" data-name="quest16">Q16: Part C - 5 Karkinos (100+)</option>
+                    <option value="82254 2" data-name="quest16">Q16: Part D - 2 Surface Reapers</option>
+                    <option value="86892 2" data-name="quest16">Q16: Part E - 2 Reaper Queens</option>
+                </optgroup>
+                <optgroup label="Extinction">
+                    <option value="31620 25" data-name="quest17">Q17: 25m on Extinction</option>
+                    <option value="64400 1000|46134 500|83536 1000|92965 500|29052 500" data-name="quest18">Q18: COMPLETE ALL - Broken World</option>
+                    <option value="64400 1000" data-name="quest18">Q18: Part A - 1000 Sulfur</option>
+                    <option value="46134 500" data-name="quest18">Q18: Part B - 500 Electronics</option>
+                    <option value="83536 1000" data-name="quest18">Q18: Part C - 1000 Scrap Metal</option>
+                    <option value="92965 500" data-name="quest18">Q18: Part D - 500 Corrupted Nodules</option>
+                    <option value="29052 500" data-name="quest18">Q18: Part E - 500 Corrupted Sap</option>
+                    <option value="37839 2|97771 2|24701 2" data-name="quest19">Q19: COMPLETE ALL - Beasts of Broken Earth</option>
+                    <option value="37839 2" data-name="quest19">Q19: Part A - 2 Gachas (100+)</option>
+                    <option value="97771 2" data-name="quest19">Q19: Part B - 2 Snow Owls (100+)</option>
+                    <option value="24701 2" data-name="quest19">Q19: Part C - 2 Managarmrs (100+)</option>
+                    <option value="54794 10|46308 10|39814 1" data-name="quest20">Q20: COMPLETE ALL - The Final Sweep</option>
+                    <option value="54794 10" data-name="quest20">Q20: Part A - 10 Defense Units</option>
+                    <option value="46308 10" data-name="quest20">Q20: Part B - 10 Enforcers</option>
+                    <option value="39814 1" data-name="quest20">Q20: Part C - 1 Dreadnaughtus</option>
+                </optgroup>
+                <optgroup label="Ragnarök">
+                    <option value="67050 30" data-name="quest21">Q21: 30m on Ragnarok</option>
+                    <option value="46713 1000|20999 1000|52687 1000" data-name="quest22">Q22: COMPLETE ALL - Ragnarok’s Riches</option>
+                    <option value="46713 1000" data-name="quest22">Q22: Part A - 1000 Rockarrot</option>
+                    <option value="20999 1000" data-name="quest22">Q22: Part B - 1000 Savoroot</option>
+                    <option value="52687 1000" data-name="quest22">Q22: Part C - 1000 Organic Poly</option>
+                    <option value="18549 1|83804 2|95201 1|48060 2" data-name="quest23">Q23: COMPLETE ALL - Predator to Partner</option>
+                    <option value="18549 1" data-name="quest23">Q23: Part A - 1 Baby Ice Wyvern</option>
+                    <option value="83804 2" data-name="quest23">Q23: Part B - 2 Griffins (100+)</option>
+                    <option value="95201 1" data-name="quest23">Q23: Part C - 1 Baby Bison</option>
+                    <option value="48060 2" data-name="quest23">Q23: Part D - 2 Drakaras (100+)</option>
+                    <option value="35844 5|67264 1|27103 1|63762 1|63058 1" data-name="quest24">Q24: COMPLETE ALL - Wrath of Highlands</option>
+                    <option value="35844 5" data-name="quest24">Q24: Part A - 5 Shadow Wyverns</option>
+                    <option value="67264 1" data-name="quest24">Q24: Part B - Summer Drakeling</option>
+                    <option value="27103 1" data-name="quest24">Q24: Part C - Autumn Drakeling</option>
+                    <option value="63762 1" data-name="quest24">Q24: Part D - Spring Drakeling</option>
+                    <option value="63058 1" data-name="quest24">Q24: Part E - Winter Drakeling</option>
+                </optgroup>
+                <optgroup label="Valguero">
+                    <option value="42057 35" data-name="quest25">Q25: 35m on Valguero</option>
+                    <option value="10590 5000|31340 5000|12605 5000" data-name="quest26">Q26: COMPLETE ALL - Riches of White Cliffs</option>
+                    <option value="10590 5000" data-name="quest26">Q26: Part A - 5000 Aquatic Mushroom</option>
+                    <option value="31340 5000" data-name="quest26">Q26: Part B - 5000 Ascerbic Mushroom</option>
+                    <option value="12605 5000" data-name="quest26">Q26: Part C - 5000 Salt</option>
+                    <option value="89746 2|10092 1|80624 2" data-name="quest27">Q27: COMPLETE ALL - Allies of White Cliffs</option>
+                    <option value="89746 2" data-name="quest27">Q27: Part A - 2 Ice Golems</option>
+                    <option value="10092 1" data-name="quest27">Q27: Part B - 1 Shadow Wyvern</option>
+                    <option value="80624 2" data-name="quest27">Q27: Part C - 2 Chalk Golems</option>
+                    <option value="77349 25|67350 5|86478 5|37473 5|91227 3" data-name="quest28">Q28: COMPLETE ALL - Blood on White Cliffs</option>
+                    <option value="77349 25" data-name="quest28">Q28: Part A - 25 Seekers (25+)</option>
+                    <option value="67350 5" data-name="quest28">Q28: Part B - 5 Ice Golems</option>
+                    <option value="86478 5" data-name="quest28">Q28: Part C - 5 Chalk Golems</option>
+                    <option value="37473 5" data-name="quest28">Q28: Part D - 5 Yeti</option>
+                    <option value="91227 3" data-name="quest28">Q28: Part E - 3 MegaRaptors</option>
                 </optgroup>
             </select>
         </div>
@@ -163,7 +237,7 @@
             </select>
         </div>
 
-        <button class="btn-progress" onclick="genBP('progress')">Add Progress</button>
+        <button class="btn-progress" onclick="genBP('progress')">Add Selected Progress</button>
         <button class="btn-reset" onclick="genBP('reset')">Reset Rewards</button>
     </div>
 
@@ -203,28 +277,29 @@
 
     <div class="result-area">
         <code id="output">Waiting for generation...</code><br>
-        <button class="copy-btn" id="copyBtn" onclick="copyText()" style="display:none;">Copy Command</button>
+        <button class="copy-btn" id="copyBtn" onclick="copyText()" style="display:none;">Copy Command(s)</button>
     </div>
 </div>
 
 <script>
-    let currentMode = 'bp';
     function setMode(mode) {
-        currentMode = mode;
         document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
         if (mode === 'bp') document.querySelectorAll('.mode-btn')[0].classList.add('active');
         else document.querySelectorAll('.mode-btn')[1].classList.add('active');
         document.getElementById('bpFields').classList.toggle('hidden', mode !== 'bp');
         document.getElementById('permFields').classList.toggle('hidden', mode !== 'perm');
-        document.getElementById('idBox').classList.toggle('hidden', false);
         togglePermInputs();
     }
     function togglePermInputs() {
-        if(currentMode !== 'perm') return;
         const cmd = document.getElementById('permCmd').value;
-        document.getElementById('groupSelectBox').classList.toggle('hidden', cmd === 'list' || cmd === 'reload');
-        document.getElementById('timedBox').classList.toggle('hidden', cmd !== 'addtimed');
-        document.getElementById('idBox').classList.toggle('hidden', cmd === 'reload');
+        const isPerm = !document.getElementById('permFields').classList.contains('hidden');
+        if(isPerm) {
+            document.getElementById('groupSelectBox').classList.toggle('hidden', cmd === 'list' || cmd === 'reload');
+            document.getElementById('timedBox').classList.toggle('hidden', cmd !== 'addtimed');
+            document.getElementById('idBox').classList.toggle('hidden', cmd === 'reload');
+        } else {
+            document.getElementById('idBox').classList.remove('hidden');
+        }
     }
     function genBP(type) {
         const id = document.getElementById('eosId').value.trim();
@@ -232,17 +307,16 @@
         const reward = document.getElementById('rewardType').value;
         if(!id) return alert("Please enter EOS ID");
         
-        let cmd = "";
         if (type === 'progress') {
-            cmd = `BattlePass.AddProgress ${id} ${sel.value}`;
+            const parts = sel.value.split('|');
+            const cmd = parts.map(p => `BattlePass.AddProgress ${id} ${p}`).join('\n');
+            updateOutput(cmd);
         } else {
-            const questName = sel.options[sel.selectedIndex].dataset.name;
-            cmd = `BattlePass.ResetQuestRewards ${id} ${questName}`;
-            if (reward !== "") {
-                cmd += ` ${reward}`;
-            }
+            const qName = sel.options[sel.selectedIndex].dataset.name;
+            let cmd = `BattlePass.ResetQuestRewards ${id} ${qName}`;
+            if(reward) cmd += ` ${reward}`;
+            updateOutput(cmd);
         }
-        updateOutput(cmd);
     }
     function genPerm() {
         const id = document.getElementById('eosId').value.trim();
@@ -261,8 +335,8 @@
         updateOutput(cmd);
     }
     function updateOutput(text) { document.getElementById('output').innerText = text; document.getElementById('copyBtn').style.display = 'block'; }
-    function copyText() { navigator.clipboard.writeText(document.getElementById('output').innerText); document.getElementById('copyBtn').innerText = "COPIED!"; setTimeout(() => document.getElementById('copyBtn').innerText = "Copy Command", 2000); }
-    function clearAll() { document.getElementById('eosId').value = ''; document.getElementById('output').innerText = 'Waiting...'; document.getElementById('copyBtn').style.display = 'none'; document.getElementById('rewardType').value = ''; }
+    function copyText() { navigator.clipboard.writeText(document.getElementById('output').innerText); document.getElementById('copyBtn').innerText = "COPIED!"; setTimeout(() => document.getElementById('copyBtn').innerText = "Copy Command(s)", 2000); }
+    function clearAll() { document.getElementById('eosId').value = ''; document.getElementById('output').innerText = 'Waiting...'; document.getElementById('copyBtn').style.display = 'none'; }
 </script>
 </body> 
 </html>
